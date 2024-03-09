@@ -30,11 +30,11 @@ public class TeleportDiamond extends Item {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        BlockHitResult ray = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
+        BlockHitResult ray = rayTrace(world, player, ClipContext.Fluid.NONE);
         BlockPos pos = ray.getBlockPos().relative(ray.getDirection());
         player.setPos(pos.getX(), pos.getY(), pos.getZ());
 
-        player.getCooldowns().addCooldown(this, 20);
+        player.getCooldowns().addCooldown(this, 5);
 
         player.fallDistance = 0F;
 

@@ -1,6 +1,7 @@
 package com.axidreamdragon.diamondspawner.init;
 
 import com.axidreamdragon.diamondspawner.DiamondSpawnerMain;
+import com.axidreamdragon.diamondspawner.items.DiamondAmulet;
 import com.axidreamdragon.diamondspawner.items.FuelItem;
 import com.axidreamdragon.diamondspawner.items.TeleportDiamond;
 
@@ -19,7 +20,7 @@ public class ItemInit {
                         DiamondSpawnerMain.MOD_ID);
 
         public static final RegistryObject<Item> DIAMOND_AMULET = ITEMS.register("diamond_amulet",
-                        () -> new Item(new Item.Properties().tab(ModCreativeTab.instance)));
+                        () -> new DiamondAmulet(new Item.Properties().tab(ModCreativeTab.instance).durability(64)));
 
         public static final RegistryObject<Item> YUMMY_DIAMOND = ITEMS.register("yummy_diamond",
                         () -> new Item(new Item.Properties().tab(ModCreativeTab.instance)
