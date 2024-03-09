@@ -3,6 +3,7 @@ package com.axidreamdragon.diamondspawner.init;
 import com.axidreamdragon.diamondspawner.DiamondSpawnerMain;
 import com.axidreamdragon.diamondspawner.items.DiamondAmulet;
 import com.axidreamdragon.diamondspawner.items.FuelItem;
+import com.axidreamdragon.diamondspawner.items.ImplodingDiamond;
 import com.axidreamdragon.diamondspawner.items.TeleportDiamond;
 
 import net.minecraft.world.effect.MobEffectInstance;
@@ -34,6 +35,9 @@ public class ItemInit {
 
         public static final RegistryObject<Item> TELEPORT_DIAMOND = ITEMS.register("teleport_diamond",
                         () -> new TeleportDiamond(new Item.Properties().tab(ModCreativeTab.instance).durability(50)));
+
+        public static final RegistryObject<Item> IMPLODING_DIAMOND = ITEMS.register("imploding_diamond",
+                        () -> new ImplodingDiamond(new Item.Properties().tab(ModCreativeTab.instance).durability(1)));
 
         public static class ModCreativeTab extends CreativeModeTab {
                 public static final ModCreativeTab instance = new ModCreativeTab(CreativeModeTab.TABS.length,
