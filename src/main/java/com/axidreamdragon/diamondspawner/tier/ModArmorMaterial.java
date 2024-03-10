@@ -14,7 +14,7 @@ import java.util.function.Supplier;
 
 public enum ModArmorMaterial implements ArmorMaterial {
     AMULET(DiamondSpawnerMain.MOD_ID + ":amulet", 8, new int[] { 3, 3, 3, 3 },
-            3000, SoundEvents.EXPERIENCE_ORB_PICKUP, 0.0F, 0.0F,
+            3000, SoundEvents.EXPERIENCE_ORB_PICKUP, 0.0F, 100.0F,
             () -> {
                 return Ingredient.of(ItemInit.DIAMOND_AMULET.get());
             });

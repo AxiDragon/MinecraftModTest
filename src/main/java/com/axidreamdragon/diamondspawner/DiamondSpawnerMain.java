@@ -1,5 +1,6 @@
 package com.axidreamdragon.diamondspawner;
 
+import com.axidreamdragon.diamondspawner.init.EntityInit;
 import com.axidreamdragon.diamondspawner.init.ItemInit;
 import com.mojang.logging.LogUtils;
 import net.minecraft.world.level.block.Block;
@@ -38,6 +39,7 @@ public class DiamondSpawnerMain {
 
         modEventBus.addListener(this::setup);
         ItemInit.ITEMS.register(modEventBus);
+        EntityInit.ENTITY_TYPES.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
