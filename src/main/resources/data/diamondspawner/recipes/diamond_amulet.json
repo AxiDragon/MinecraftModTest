@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "GdG",
+        "gDg",
+        " d "
+    ],
+    "key": {
+        "G": {
+            "item": "minecraft:gold_block"
+        },
+        "d": {
+            "item": "minecraft:diamond"
+        },
+        "g": {
+            "item": "minecraft:gold_ingot"
+        },
+        "D": {
+            "item": "minecraft:diamond_block"
+        }
+    },
+    "result": {
+        "item": "diamondspawner:diamond_amulet"
+    }
+}

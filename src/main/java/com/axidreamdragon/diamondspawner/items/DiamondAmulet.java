@@ -3,10 +3,14 @@ package com.axidreamdragon.diamondspawner.items;
 import java.util.Random;
 
 import com.axidreamdragon.diamondspawner.tier.ModArmorMaterial;
+import com.axidreamdragon.diamondspawner.util.IDamageHandlingArmor;
+import com.axidreamdragon.diamondspawner.util.ItemEntityStackPreventer;
 
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
@@ -15,9 +19,10 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class DiamondAmulet extends ArmorItem {
+public class DiamondAmulet extends ArmorItem implements IDamageHandlingArmor {
     private float soundPitch = 2.0F;
     private final float velocityRadius = 0.5F;
+    private final float explosionVelocityRadius = 0.8F;
     private final float upwardVelocity = 1F;
 
     private final float cooldown = 0.5F;
@@ -36,13 +41,7 @@ public class DiamondAmulet extends ArmorItem {
     }
 
     public void spawnDiamond(ItemStack stack, Level world, Player player) {
-        ItemStack diamond = new ItemStack(Items.DIAMOND);
-
-        ItemEntity diamondEntity = new ItemEntity(world, player.getX(), player.getY() + 0.5, player.getZ(), diamond);
-
-        diamondEntity.setDeltaMovement(getRandomVelocity());
-
-        diamondEntity.setPickUpDelay(20);
+        ItemEntity diamondEntity = createDiamondEntity(world, player);
 
         world.addFreshEntity(diamondEntity);
 
@@ -64,6 +63,20 @@ public class DiamondAmulet extends ArmorItem {
         }
     }
 
+    private ItemEntity createDiamondEntity(Level world, Player player) {
+        ItemStack diamond = new ItemStack(Items.DIAMOND);
+
+        ItemEntity diamondEntity = new ItemEntity(world, player.getX(), player.getY() + 0.5, player.getZ(), diamond);
+
+        ItemEntityStackPreventer.preventStacking(diamondEntity);
+
+        diamondEntity.setDeltaMovement(getRandomVelocity());
+
+        diamondEntity.setPickUpDelay(20);
+
+        return diamondEntity;
+    }
+
     private Vec3 getRandomVelocity() {
         Random random = new Random();
 
@@ -74,5 +87,76 @@ public class DiamondAmulet extends ArmorItem {
         double z = Math.sin(angle) * distance;
 
         return new Vec3(x, upwardVelocity, z);
+    }
+
+    @Override
+    public float onDamaged(LivingEntity entity, EquipmentSlot slot, DamageSource source, float damage) {
+        explodeDiamonds(entity);
+        return damage;
+    }
+
+    private void explodeDiamonds(LivingEntity entity) {
+        Player player = (Player) entity;
+
+        if (player == null)
+            return;
+
+        Level world = player.getLevel();
+
+        for (int i = 0; i < absorbDiamonds(player); i++) {
+            ItemEntity explosionDiamond = getExplosionDiamond(world, player);
+
+            world.addFreshEntity(explosionDiamond);
+        }
+
+        world.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.GENERIC_EXPLODE, SoundSource.PLAYERS, 1.0F, 1.0F);
+
+        ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+        stack.shrink(1);
+    }
+
+    private ItemEntity getExplosionDiamond(Level world, Player player) {
+        ItemStack diamond = new ItemStack(Items.DIAMOND);
+
+        ItemEntity diamondEntity = new ItemEntity(world, player.getX(), player.getY() + 1, player.getZ(),
+                diamond);
+
+        ItemEntityStackPreventer.preventStacking(diamondEntity);
+
+        diamondEntity.setDeltaMovement(getRandomExplosionVelocity());
+
+        diamondEntity.setPickUpDelay(20);
+
+        return diamondEntity;
+    }
+
+    private Vec3 getRandomExplosionVelocity() {
+        Random random = new Random();
+
+        double x = random.nextGaussian();
+        double y = random.nextGaussian();
+        double z = random.nextGaussian();
+
+        Vec3 velocity = new Vec3(x, y, z);
+        velocity = velocity.normalize();
+        velocity = velocity.scale(explosionVelocityRadius);
+
+        return velocity;
+    }
+
+    public int absorbDiamonds(Player player) {
+        int diamondCount = 0;
+
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+
+            if (stack.getItem() == Items.DIAMOND) {
+                diamondCount += stack.getCount();
+                player.getInventory().removeItem(stack);
+            }
+        }
+
+        return diamondCount;
     }
 }
