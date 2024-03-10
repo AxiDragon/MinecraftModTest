@@ -1,14 +1,16 @@
 package com.axidreamdragon.diamondspawner.init;
 
 import com.axidreamdragon.diamondspawner.DiamondSpawnerMain;
-import com.axidreamdragon.diamondspawner.items.DiamondAmulet;
 import com.axidreamdragon.diamondspawner.items.FuelItem;
 import com.axidreamdragon.diamondspawner.items.ImplodingDiamond;
 import com.axidreamdragon.diamondspawner.items.TeleportDiamond;
+import com.axidreamdragon.diamondspawner.tier.ModArmorMaterial;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -21,7 +23,8 @@ public class ItemInit {
                         DiamondSpawnerMain.MOD_ID);
 
         public static final RegistryObject<Item> DIAMOND_AMULET = ITEMS.register("diamond_amulet",
-                        () -> new DiamondAmulet(new Item.Properties().tab(ModCreativeTab.instance).durability(64)));
+                        () -> new ArmorItem(ModArmorMaterial.AMULET, EquipmentSlot.CHEST,
+                                        new Item.Properties().tab(ModCreativeTab.instance)));
 
         public static final RegistryObject<Item> YUMMY_DIAMOND = ITEMS.register("yummy_diamond",
                         () -> new Item(new Item.Properties().tab(ModCreativeTab.instance)
